@@ -3,11 +3,12 @@ from tkinter import messagebox
 from tkinter import ttk
 from planner import BudgetPlanner, Entry
 
+#Grafische Benutzeroberfläche
 class BudgetGUI:
     def __init__(self, root):
         self.root = root
         self.root.title("Budget Planer")
-        self.planner = BudgetPlanner()
+        self.planner = BudgetPlaner()
 
         self.setup_widgets()
         self.load_entries()
@@ -37,13 +38,13 @@ class BudgetGUI:
 
         self.summary_label = tk.Label(self.root, text="Saldo: 0.00 €", font=("Arial", 12, "bold"))
         self.summary_label.pack(pady=5)
-
+#Einträge hinzufügen
     def add_entry(self):
         desc = self.description_entry.get()
         try:
             amount = float(self.amount_entry.get())
         except ValueError:
-            messagebox.showerror("Fehler", "Bitte gültigen Betrag eingeben.")
+            messagebox.showerror("Falsch", "Bitte gültigen Betrag eingeben.")
             return
         typ = self.type_var.get()
 
@@ -54,7 +55,7 @@ class BudgetGUI:
         self.amount_entry.delete(0, tk.END)
 
         self.load_entries()
-
+#Einträge löschen
     def delete_entry(self):
         selection = self.listbox.curselection()
         if not selection:
@@ -67,7 +68,7 @@ class BudgetGUI:
             del self.planner.entries[index]
             self.planner.save_entries()
             self.load_entries()
-
+#Einträge laden
     def load_entries(self):
         self.listbox.delete(0, tk.END)
         for e in self.planner.list_entries():
@@ -76,7 +77,7 @@ class BudgetGUI:
 
         income, expense, balance = self.planner.get_summary()
         self.summary_label.config(text=f"Saldo: {balance:.2f} €")
-
+#erstellt ein Tkinter Fenster
 def main():
     root = tk.Tk()
     app = BudgetGUI(root)
